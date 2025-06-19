@@ -12,7 +12,7 @@ import styles from "./Dashboard.module.css";
 interface Meal {
   id: string;
   name: string;
-  isFinal: boolean;
+  isComplete: boolean;
 }
 
 interface MenuItem {
@@ -35,7 +35,7 @@ interface Assignment {
 export default function Dashboard() {
   const [meals, setMeals] = useState<Meal[]>([]);
   const [selectedMealId, setSelectedMealId] = useState("");
-  const [isFinal, setIsFinal] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [diningHalls, setDiningHalls] = useState<Record<string, string>>({});
@@ -79,7 +79,7 @@ export default function Dashboard() {
     );
 
     const mealRef = meals.find(m => m.id === selectedMealId);
-    setIsFinal(mealRef?.isFinal || false);
+    setIsComplete(mealRef?.isComplete || false);
 
     return () => {
       unsubscribe1();
@@ -125,7 +125,7 @@ export default function Dashboard() {
                 <option key={meal.id} value={meal.id}>{meal.name}</option>
               ))}
             </select>
-            {isFinal && <span className={styles.finalized}>✅ Finalized</span>}
+            {isComplete && <span className={styles.completed}>✅ Complete</span>}
           </div>
         </div>
 
@@ -137,7 +137,7 @@ export default function Dashboard() {
                 <thead>
                   <tr>
                     <th>Dish</th>
-                    <th>Total Pot</th>
+                    <th>Total Pots</th>
                   </tr>
                 </thead>
                 <tbody>

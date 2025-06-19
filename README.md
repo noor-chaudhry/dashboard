@@ -1,54 +1,97 @@
-# React + TypeScript + Vite
+# Langar Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A lightweight web application to manage and track meal preparation and distribution for large-scale dining operations, such as Langar (community kitchen). This project includes an **Admin Dashboard** to manage meals, menu items, and pot assignments, and a **Public Dashboard** to display real-time delivery progress by dining hall.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+### 🔐 Admin Dashboard (`/admin`)
+Accessible only by authorized personnel.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Create Meals** – Define meals (e.g., Breakfast, Lunch).
+- **Add Menu Items** – Add dishes (e.g., Rice, Daal).
+- **Add Dining Halls** – Add serving areas or locations.
+- **Assign Menu Items to Meals** – Set how many pots of each dish are prepared for a meal.
+- **Assign Pots to Dining Halls** – Distribute dishes to each hall.
+- **Track Delivered Pots** – Update delivery counts as pots are distributed.
+- **Complete Meal** – Locks the meal to prevent changes once service ends.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### 📊 Public Dashboard (`/`)
+- **Meal Selector** – View data for a selected meal.
+- **Menu Overview** – Shows each dish and total pots prepared.
+- **Grouped Pot Assignments** – For each dining hall, view assigned and delivered pots per dish.
+
+---
+
+## 🛠 Tech Stack
+
+- **React + TypeScript** for UI
+- **Firebase Firestore** for realtime data
+- **Custom CSS (no Tailwind)** for styling
+- **Vite** for fast local development
+
+---
+
+## 📁 Folder Structure
+
+```
+src/
+  components/          → Reusable form and table components
+  pages/
+    Dashboard.tsx      → Public view for kitchen/dining tracking
+    AdminDashboard.tsx → Admin tools and forms
+  firebase.ts          → Firestore config
+  styles/              → Custom CSS modules
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🧪 Setup Instructions
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-username/dashboard.git
+   cd dashboard
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Firebase Configuration**
+   Create a `.env` file in the root with the following:
+   ```env
+   VITE_FIREBASE_API_KEY=your_api_key
+   VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+   VITE_FIREBASE_PROJECT_ID=your_project_id
+   VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+   VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+   VITE_FIREBASE_APP_ID=your_app_id
+   ```
+
+4. **Run the app**
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## 📸 Preview
+
+![Langar Dashboard UI](./public/assets/dashboard-preview.png)
+
+---
+
+## 📝 Notes
+
+- Only **finalized meals** are visible on the public dashboard.
+- All updates reflect in **real-time** via Firestore subscriptions.
+- The live stream section is a placeholder for future video integration.
+
+---
+
+## 🙏 Acknowledgements
+
+Built for efficient and transparent food distribution during high-volume events like **Jalsa Salana** and other community gatherings.
