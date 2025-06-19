@@ -34,7 +34,12 @@ interface DiningHall {
   name: string;
 }
 
-export default function UpdateDeliveredPots() {
+interface Props {
+  refreshKey?: number;
+  onUpdate?: () => void;
+}
+
+export default function UpdateDeliveredPots({ refreshKey, onUpdate }: Props) {
   const [meals, setMeals] = useState<Meal[]>([]);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [diningHalls, setDiningHalls] = useState<DiningHall[]>([]);
@@ -53,7 +58,7 @@ export default function UpdateDeliveredPots() {
     };
 
     fetchStatic();
-  }, []);
+  }, [refreshKey]);
 
   useEffect(() => {
     const fetchAssignments = async () => {
@@ -86,6 +91,7 @@ export default function UpdateDeliveredPots() {
     setAssignments(prev =>
       prev.map(a => (a.id === id ? { ...a, deliveredPots: newValue } : a))
     );
+    onUpdate?.();
   };
 
   const handleIncrement = (id: string) => {

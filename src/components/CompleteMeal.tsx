@@ -5,10 +5,15 @@ import { db } from "../firebase";
 interface Meal {
   id: string;
   name: string;
-  isFinal?: boolean;
+  isComplete?: boolean;
 }
 
-export default function FinalizeMeal() {
+interface Props {
+  refreshKey?: number;
+  onUpdate?: () => void;
+}
+
+export default function CompleteMeal({ refreshKey, onUpdate }: Props) {
   const [meals, setMeals] = useState<Meal[]>([]);
   const [selectedMealId, setSelectedMealId] = useState("");
   const [status, setStatus] = useState("");
@@ -17,11 +22,11 @@ export default function FinalizeMeal() {
     const fetchMeals = async () => {
       const snap = await getDocs(collection(db, "meals"));
       const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Meal));
-      setMeals(data.filter(m => !m.isFinal)); // Only show active meals
+      setMeals(data.filter(m => !m.isComplete));
     };
 
     fetchMeals();
-  }, []);
+  }, [refreshKey]);
 
   const handleFinalize = async () => {
     if (!selectedMealId) return;
@@ -35,6 +40,7 @@ export default function FinalizeMeal() {
     setStatus("Meal finalized.");
     setMeals(prev => prev.filter(m => m.id !== selectedMealId));
     setSelectedMealId("");
+    onUpdate?.();
   };
 
   return (

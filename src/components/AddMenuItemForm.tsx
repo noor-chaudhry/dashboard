@@ -2,14 +2,21 @@ import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
-export default function AddMenuItemForm() {
+interface AddMenuItemFormProps {
+  onCreate?: () => void;
+}
+
+export default function AddMenuItemForm({ onCreate }: AddMenuItemFormProps) {
   const [name, setName] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
+
     await addDoc(collection(db, "menuItems"), { name });
     setName("");
+
+    if (onCreate) onCreate(); // Notify parent (AdminDashboard) of change
   };
 
   return (

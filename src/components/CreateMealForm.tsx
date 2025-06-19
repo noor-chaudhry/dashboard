@@ -2,18 +2,25 @@ import { useState } from "react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
 
-export default function CreateMealForm() {
+interface CreateMealFormProps {
+  onCreate?: () => void;
+}
+
+export default function CreateMealForm({ onCreate }: CreateMealFormProps) {
   const [name, setName] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
+
     await addDoc(collection(db, "meals"), {
       name,
       isFinal: false,
       createdAt: serverTimestamp(),
     });
+
     setName("");
+    if (onCreate) onCreate(); // Notify parent to refresh
   };
 
   return (

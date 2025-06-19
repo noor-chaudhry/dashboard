@@ -2,14 +2,21 @@ import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
-export default function AddDiningHallForm() {
+interface AddDiningHallFormProps {
+  onCreate?: () => void;
+}
+
+export default function AddDiningHallForm({ onCreate }: AddDiningHallFormProps) {
   const [name, setName] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
+
     await addDoc(collection(db, "diningHalls"), { name });
     setName("");
+
+    if (onCreate) onCreate(); // Notify AdminDashboard of the update
   };
 
   return (

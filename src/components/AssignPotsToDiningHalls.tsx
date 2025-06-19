@@ -10,7 +10,12 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 
-export default function AssignPotsToDiningHalls() {
+interface Props {
+  refreshKey?: number;
+  onUpdate?: () => void;
+}
+
+export default function AssignPotsToDiningHalls({ refreshKey, onUpdate }: Props) {
   const [meals, setMeals] = useState<any[]>([]);
   const [menuItems, setMenuItems] = useState<any[]>([]);
   const [diningHalls, setDiningHalls] = useState<any[]>([]);
@@ -26,7 +31,7 @@ export default function AssignPotsToDiningHalls() {
       setDiningHalls(hallSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     };
     fetchStaticData();
-  }, []);
+  }, [refreshKey]);
 
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -87,8 +92,8 @@ export default function AssignPotsToDiningHalls() {
       }
     }
 
-    setAssignedPots({});
     alert("Pots assigned successfully.");
+    if (onUpdate) onUpdate();
   };
 
   return (

@@ -3,6 +3,8 @@ import {
   collection,
   getDocs,
   addDoc,
+  updateDoc,
+  doc,
   query,
   where,
 } from "firebase/firestore";
@@ -18,7 +20,12 @@ interface Meal {
   name: string;
 }
 
-export default function AssignMenuItemsToMeal() {
+interface Props {
+  refreshKey?: number;
+  onUpdate?: () => void;
+}
+
+export default function AssignMenuItemsToMeal({ refreshKey, onUpdate }: Props) {
   const [meals, setMeals] = useState<Meal[]>([]);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [selectedMealId, setSelectedMealId] = useState("");
@@ -38,7 +45,7 @@ export default function AssignMenuItemsToMeal() {
 
     fetchMeals();
     fetchMenuItems();
-  }, []);
+  }, [refreshKey]);
 
   useEffect(() => {
     const fetchExistingAssignments = async () => {
@@ -70,20 +77,41 @@ export default function AssignMenuItemsToMeal() {
     }
 
     try {
-      const toAdd = menuItems.filter(item => potCounts[item.id] > 0);
-      await Promise.all(
-        toAdd.map(item =>
-          addDoc(collection(db, "mealMenuItems"), {
+      const q = query(
+        collection(db, "mealMenuItems"),
+        where("mealId", "==", selectedMealId)
+      );
+      const snap = await getDocs(q);
+
+      const existingDocs: Record<string, string> = {};
+      snap.forEach(docSnap => {
+        const data = docSnap.data();
+        if (data.menuItemId) {
+          existingDocs[data.menuItemId] = docSnap.id;
+        }
+      });
+
+      const tasks = menuItems
+        .filter(item => potCounts[item.id] > 0)
+        .map(item => {
+          const existingDocId = existingDocs[item.id];
+          const payload = {
             mealId: selectedMealId,
             menuItemId: item.id,
             dishName: item.name,
             totalPots: potCounts[item.id]
-          })
-        )
-      );
+          };
+
+          return existingDocId
+            ? updateDoc(doc(db, "mealMenuItems", existingDocId), payload)
+            : addDoc(collection(db, "mealMenuItems"), payload);
+        });
+
+      await Promise.all(tasks);
 
       setStatus("Menu items assigned.");
       setPotCounts({});
+      if (onUpdate) onUpdate();
     } catch (err) {
       console.error(err);
       setStatus("Error assigning items.");
