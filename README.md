@@ -78,12 +78,6 @@ src/
 
 ---
 
-## 📸 Preview
-
-![Langar Dashboard UI](./public/assets/dashboard-preview.png)
-
----
-
 ## 📝 Notes
 
 - Only **finalized meals** are visible on the public dashboard.
