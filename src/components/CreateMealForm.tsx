@@ -15,7 +15,7 @@ export default function CreateMealForm({ onCreate }: CreateMealFormProps) {
 
     await addDoc(collection(db, "meals"), {
       name,
-      isFinal: false,
+      isComplete: false,
       createdAt: serverTimestamp(),
     });
 

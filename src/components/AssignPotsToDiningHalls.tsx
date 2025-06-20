@@ -5,8 +5,7 @@ import {
   query,
   where,
   addDoc,
-  updateDoc,
-  doc,
+  updateDoc
 } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -22,6 +21,7 @@ export default function AssignPotsToDiningHalls({ refreshKey, onUpdate }: Props)
   const [selectedMealId, setSelectedMealId] = useState("");
   const [selectedHallId, setSelectedHallId] = useState("");
   const [assignedPots, setAssignedPots] = useState<Record<string, number>>({});
+  const [status, setStatus] = useState("");
 
   useEffect(() => {
     const fetchStaticData = async () => {
@@ -92,7 +92,7 @@ export default function AssignPotsToDiningHalls({ refreshKey, onUpdate }: Props)
       }
     }
 
-    alert("Pots assigned successfully.");
+    setStatus("Menu items assigned.");
     if (onUpdate) onUpdate();
   };
 
@@ -153,6 +153,7 @@ export default function AssignPotsToDiningHalls({ refreshKey, onUpdate }: Props)
           </>
         )}
       </form>
+      {status && <p>{status}</p>}
     </div>
   );
 }

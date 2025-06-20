@@ -13,7 +13,7 @@ Accessible only by authorized personnel.
 - **Add Menu Items** – Add dishes (e.g., Rice, Daal).
 - **Add Dining Halls** – Add serving areas or locations.
 - **Assign Menu Items to Meals** – Set how many pots of each dish are prepared for a meal.
-- **Assign Pots to Dining Halls** – Distribute dishes to each hall.
+- ** to Dining Halls** – Distribute dishes to each hall.
 - **Track Delivered Pots** – Update delivery counts as pots are distributed.
 - **Complete Meal** – Locks the meal to prevent changes once service ends.
 

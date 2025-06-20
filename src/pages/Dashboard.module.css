@@ -49,10 +49,17 @@
   font-size: 14px;
 }
 
+.mealName {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
 .completed {
   color: green;
   font-weight: 500;
+  margin-left: 0.5rem;
 }
+
 
 .content {
   display: grid;

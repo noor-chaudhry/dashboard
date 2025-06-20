@@ -33,11 +33,11 @@ export default function CompleteMeal({ refreshKey, onUpdate }: Props) {
 
     const ref = doc(db, "meals", selectedMealId);
     await updateDoc(ref, {
-      isFinal: true,
-      finalizedAt: new Date()
+      isComplete: true,
+      completedAt: new Date()
     });
 
-    setStatus("Meal finalized.");
+    setStatus("Meal Complete.");
     setMeals(prev => prev.filter(m => m.id !== selectedMealId));
     setSelectedMealId("");
     onUpdate?.();
@@ -63,7 +63,7 @@ export default function CompleteMeal({ refreshKey, onUpdate }: Props) {
         onClick={handleFinalize}
         className="bg-red-600 text-white px-4 py-2 rounded disabled:bg-gray-400"
       >
-        Finalize Meal
+        Complete Meal
       </button>
 
       {status && <p>{status}</p>}

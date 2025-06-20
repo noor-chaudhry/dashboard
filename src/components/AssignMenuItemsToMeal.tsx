@@ -134,7 +134,7 @@ export default function AssignMenuItemsToMeal({ refreshKey, onUpdate }: Props) {
       <div className="space-y-2">
         {menuItems.map(item => (
           <div key={item.id} className="flex justify-between items-center">
-            <span>{item.name}</span>
+            <span>{item.name} </span>
             <input
               type="number"
               min={0}
