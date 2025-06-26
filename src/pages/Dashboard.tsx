@@ -98,10 +98,20 @@ export default function Dashboard() {
     }, [selectedMealId]);
 
     useEffect(() => {
-        const mealRef = meals.find(m => m.id === selectedMealId);
-        setIsComplete(mealRef?.isComplete || false);
-        setSelectedMealName(mealRef?.name || "");
-    }, [meals, selectedMealId]);
+        const fetchUpdatedMeals = async () => {
+            const snap = await getDocs(collection(db, "meals"));
+            const data = snap.docs.map(doc => ({id: doc.id, ...doc.data()} as Meal));
+            setMeals(data);
+
+            const mealRef = data.find(m => m.id === selectedMealId);
+            setIsComplete(mealRef?.isComplete || false);
+            setSelectedMealName(mealRef?.name || "");
+        };
+
+        if (selectedMealId) {
+            fetchUpdatedMeals();
+        }
+    }, [selectedMealId]);
 
     useEffect(() => {
         if (!selectedMealId) return;
